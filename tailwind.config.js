@@ -12,6 +12,7 @@ module.exports = {
         accent: "var(--color-accent)",
         border: "var(--color-border)",
         muted: "var(--color-muted)",
+        text: "var(--color-text)",
       },
     },
   },

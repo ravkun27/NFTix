@@ -1,3 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Chillax", sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 :root {
   --color-primary: #1a1a40;
   --color-secondary: #3d5a80;
@@ -6,6 +31,7 @@
   --color-accent: #00b386;
   --color-border: #cbd5e1;
   --color-muted: #94a3b8;
+  --color-text: #64748b;
 }
 
 .dark {
@@ -16,4 +42,5 @@
   --color-accent: #3d5a80;
   --color-border: #334155;
   --color-muted: #64748b;
+  --color-text: #94a3b8;
 }
