@@ -101,24 +101,12 @@ const Navbar = () => {
   const isExpanded = !isScrolled || isHovered;
 
   return (
-    <div className="min-h-screen bg-background text-text transition-colors duration-300">
-      {/* Background content for scrolling */}
-      <div className="h-[200vh] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-6xl font-light tracking-tight">
-            NFTix Collection
-          </h1>
-          <p className="text-gray-400 text-lg">
-            Scroll to see the navbar transform
-          </p>
-        </div>
-      </div>
-
+    <>
       {/* Navbar */}
       <motion.nav
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="fixed top-4 left-1/2 z-50"
+        className="fixed top-4 left-1/2 z-50 border border-gray-600 backdrop-blur-md rounded-full"
         style={{
           x: "-50%",
         }}
@@ -159,7 +147,7 @@ const Navbar = () => {
                 }}
                 transition={{ duration: 0.3, delay: isExpanded ? 0.1 : 0 }}
               >
-                NFTix
+                NFTiX
               </motion.div>
             </motion.div>
 
@@ -247,7 +235,7 @@ const Navbar = () => {
           />
         </motion.div>
       </motion.nav>
-    </div>
+    </>
   );
 };
 

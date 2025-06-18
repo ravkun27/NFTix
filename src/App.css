@@ -150,7 +150,7 @@ body {
   --color-secondary-hover: #7c3aed;
   --color-secondary-light: #1e1b4b;
 
-  --color-background: #0f172a;
+  --color-background: #060808;
   --color-surface: #1e293b;
   --color-surface-hover: #334155;
   --color-foreground: #ffffff;
@@ -440,8 +440,6 @@ p {
   color: var(--color-text-muted);
 }
 
-
-
 /* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -478,4 +476,77 @@ p {
 }
 .transition-normal {
   transition: all var(--transition-normal);
+}
+
+@keyframes grid-move {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 20px);
+  }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text:hover::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #ff0000;
+  animation: glitch-1 0.3s infinite;
+}
+
+.glitch-text:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #00ffff;
+  animation: glitch-2 0.3s infinite;
+}
+
+@keyframes glitch-1 {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(-1px, -1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(1px, -1px);
+  }
+  40% {
+    transform: translate(1px, 1px);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(-1px, 1px);
+  }
 }
