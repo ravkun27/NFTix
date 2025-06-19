@@ -50,34 +50,12 @@ const HeroSection = () => {
   };
 
   return (
-    <div
-      className="min-h-screen w-full bg-black relative overflow-hidden"
-      style={{
-        background: `
-             radial-gradient(circle at 10% 20%, rgba(0,255,255,0.1) 0%, transparent 50%),
-             radial-gradient(circle at 90% 80%, rgba(255,0,255,0.1) 0%, transparent 50%),
-             radial-gradient(circle at 50% 50%, rgba(0,100,255,0.05) 0%, transparent 70%),
-             linear-gradient(135deg, #000000 0%, #001122 100%)
-           `,
-      }}
-    >
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0 animate-pulse"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,255,255,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,255,255,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: "100px 100px",
-          }}
-        ></div>
-      </div>
+    <div className="min-h-screen w-full relative overflow-hidden">
+
 
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-8 py-16">
-        <div className="flex flex-col lg:flex-row items-start justify-between min-h-screen mt-12">
+      <div className="relative z-10 container mx-auto px-8 py-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between min-h-screen">
           {/* Left Side - Hero Text */}
           <div
             className={`flex-1 lg:pr-16 mb-16 lg:mb-0 transition-all duration-1000 ${
@@ -87,7 +65,7 @@ const HeroSection = () => {
             }`}
           >
             {/* Main Title */}
-            <div className="mb-8">
+            <div className="mb-4">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 mr-4"></div>
                 <span className="text-cyan-400 text-sm font-mono uppercase tracking-widest">
@@ -95,21 +73,21 @@ const HeroSection = () => {
                 </span>
               </div>
 
-              <h1 className="text-6xl lg:text-8xl font-bold leading-tight mb-6">
-                <span className="block bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent">
+              <h1 className="text-6xl font-bold leading-tight mb-2 flex gap-4">
+                <span className="bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent">
                   NFT
                 </span>
-                <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
                   TICKET
                 </span>
-                <span className="block bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   SYSTEM
                 </span>
               </h1>
             </div>
 
             {/* Subtitle */}
-            <div className="mb-8 max-w-2xl">
+            <div className="mb-4 max-w-2xl">
               <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed mb-6">
                 Experience the future of event access with blockchain-powered
                 digital tickets.
@@ -201,7 +179,7 @@ const HeroSection = () => {
 
           {/* Right Side - Card Carousel */}
           <div
-            className={`flex-1 flex justify-center items-center transition-all duration-1000 delay-300 ${
+            className={`sticky flex-1 flex justify-center items-center transition-all duration-1000 delay-300 ${
               isVisible
                 ? "opacity-100 translate-x-0"
                 : "opacity-0 translate-x-10"

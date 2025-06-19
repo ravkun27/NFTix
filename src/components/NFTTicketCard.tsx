@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import QRCode from "react-qr-code"; // import this at the top
 
 interface NFTTicketCardProps {
   eventName: string;
@@ -10,11 +11,11 @@ interface NFTTicketCardProps {
 }
 
 const gradientPresets = [
-  "from-cyan-400 via-blue-500 to-purple-600",
-  "from-green-400 via-cyan-500 to-blue-600",
-  "from-pink-400 via-purple-500 to-indigo-600",
-  "from-orange-400 via-red-500 to-pink-600",
-  "from-yellow-400 via-orange-500 to-red-600",
+  "from-violet-500 to-cyan-400",
+  "from-emerald-400 to-blue-500",
+  "from-pink-500 to-purple-600",
+  "from-orange-400 to-red-500",
+  "from-amber-400 to-pink-500",
 ];
 
 const NFTTicketCard = ({
@@ -32,8 +33,7 @@ const NFTTicketCard = ({
     seconds: 0,
   });
   const [isFlipped, setIsFlipped] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
   const gradient = gradientPresets[gradientId % gradientPresets.length];
 
@@ -64,241 +64,211 @@ const NFTTicketCard = ({
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePosition({ x, y });
+    setMousePos({ x, y });
   };
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
-    <div className="relative">
-      <div className="bg-black/40 border border-cyan-500/30 p-2 text-center transform hover:scale-105 transition-transform duration-200">
-        <div className="text-lg font-bold font-mono text-cyan-400 tabular-nums glitch-text">
+    <div className="flex flex-col items-center space-y-1">
+      <div className="bg-black/50 backdrop-blur-sm border border-white/10 px-2 py-1 rounded-md">
+        <span className="text-white font-mono text-lg font-bold tabular-nums">
           {value.toString().padStart(2, "0")}
-        </div>
-        <div className="text-xs text-gray-400 uppercase tracking-widest">
-          {label}
-        </div>
+        </span>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent transform -skew-x-12 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+      <span className="text-white/60 text-xs font-medium uppercase tracking-wider">
+        {label}
+      </span>
     </div>
   );
 
   return (
-    <div
-      className="relative w-80 h-96"
-      style={{ perspective: "1000px" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Card Container with 3D flip */}
+    <div className="w-80 h-96" style={{ perspective: "1000px" }}>
       <div
-        className={`relative w-full h-full cursor-pointer transition-transform duration-700 ${
-          isFlipped ? "transform-gpu" : ""
-        }`}
+        className="relative w-full h-full cursor-pointer transition-transform duration-700"
         style={{
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
         onClick={() => setIsFlipped(!isFlipped)}
+        onMouseMove={handleMouseMove}
       >
-        {/* Front Card */}
+        {/* Front Side */}
         <div
-          className="absolute w-full h-full bg-black border border-cyan-500/30 overflow-hidden transform-gpu"
+          className="absolute inset-0 rounded-2xl overflow-hidden backdrop-blur-xl border border-white/10"
           style={{
             backfaceVisibility: "hidden",
             background: `
-              linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,20,40,0.8) 100%),
-              radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(0,255,255,0.1) 0%, transparent 50%)
+              linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(15,15,15,0.9) 100%),
+              radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255,255,255,0.05) 0%, transparent 50%)
             `,
           }}
         >
-          {/* Animated Grid Background */}
-          <div className="absolute inset-0 opacity-20">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `
-                  linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px)
-                `,
-                backgroundSize: "20px 20px",
-                animation: `${
-                  isHovered ? "grid-move 20s infinite linear" : "none"
-                }`,
-              }}
-            ></div>
-          </div>
-
-          {/* Holographic Effect */}
+          {/* Gradient Glow Effect */}
           <div
-            className="absolute inset-0 opacity-30 pointer-events-none"
+            className={`absolute inset-0 opacity-20 bg-gradient-to-br ${gradient}`}
             style={{
-              background: `linear-gradient(45deg, transparent 30%, rgba(0,255,255,0.1) 50%, transparent 70%)`,
-              transform: `translateX(${isHovered ? "100%" : "-100%"})`,
-              transition: "transform 1.5s ease-in-out",
+              mask: "radial-gradient(circle at center, black 30%, transparent 70%)",
             }}
-          ></div>
+          />
 
-          <div className="relative p-6 h-full flex flex-col text-white">
+          <div className="relative p-6 h-full flex flex-col justify-between">
             {/* Header */}
-            <div className="flex justify-between items-start mb-6">
+            <div className="flex justify-between items-start">
               <div>
-                <h2
-                  className={`text-2xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent tracking-wider`}
+                <h1
+                  className={`text-2xl font-black bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
                 >
                   NFTiX
-                </h2>
-                <div className="text-cyan-400 text-xs uppercase tracking-widest opacity-80">
-                  DIGITAL ACCESS TOKEN
-                </div>
+                </h1>
+                <p className="text-white/40 text-xs font-medium tracking-widest uppercase">
+                  Digital Access
+                </p>
               </div>
-              <div className="relative">
-                <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/50 px-3 py-1 backdrop-blur-sm">
-                  <span className="text-cyan-400 font-mono text-sm">
-                    #{ticketId}
-                  </span>
+              <div className="text-right">
+                <div className="text-white/80 text-xs font-mono">
+                  #{ticketId.slice(0, 6)}
                 </div>
-                <div className="absolute inset-0 bg-cyan-400/20 blur-sm animate-pulse"></div>
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-1 animate-pulse"></div>
               </div>
             </div>
 
-            {/* Event Info */}
-            <div className="mb-4">
-              <h3 className="text-xl font-bold mb-3 text-white tracking-wide">
-                {eventName}
-              </h3>
-              <div className="relative">
+            {/* Event Details */}
+            <div className="space-y-3">
+              <div>
+                <h2 className="text-white text-lg font-bold tracking-tight leading-tight">
+                  {eventName}
+                </h2>
                 <div
-                  className={`h-0.5 bg-gradient-to-r ${gradient} mb-3 transition-all duration-500 ${
-                    isHovered ? "w-full shadow-lg shadow-cyan-500/50" : "w-1/2"
-                  }`}
+                  className={`h-0.5 w-16 bg-gradient-to-r ${gradient} mt-2`}
                 ></div>
               </div>
-              <p className="text-gray-300 text-sm flex items-center">
-                <span className="w-2 h-2 bg-cyan-400 mr-2 animate-pulse"></span>
-                {location}
-              </p>
-            </div>
 
-            {/* Countdown */}
-            <div className="mb-6">
-              <div className="text-center mb-4">
-                <p className="text-cyan-400 text-xs font-mono uppercase tracking-[0.2em] opacity-80">
-                  &gt;&gt; EVENT INITIALIZATION &lt;&lt;
-                </p>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                <TimeUnit value={timeLeft.days} label="DAYS" />
-                <TimeUnit value={timeLeft.hours} label="HRS" />
-                <TimeUnit value={timeLeft.minutes} label="MIN" />
-                <TimeUnit value={timeLeft.seconds} label="SEC" />
-              </div>
-            </div>
-
-            {/* Command Line */}
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="bg-black/70 border border-cyan-500/30 p-2 font-mono text-xs">
-                <span className="text-green-400">$</span>
-                <span className="text-cyan-400 ml-2 animate-pulse">
-                  click_to_flip_card
-                </span>
-                <span className="animate-ping">_</span>
-              </div>
-              
-            </div>
-
-            {/* Corner Accents */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-500/70"></div>
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyan-500/70"></div>
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyan-500/70"></div>
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-500/70"></div>
-          </div>
-        </div>
-
-        {/* Back Card */}
-        <div
-          className="absolute w-full h-full bg-black border border-cyan-500/30 overflow-hidden transform-gpu"
-          style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            background: `
-              linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,20,40,0.8) 100%),
-              radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(0,255,255,0.1) 0%, transparent 50%)
-            `,
-          }}
-        >
-          <div className="relative p-6 h-full text-white">
-            {/* Header */}
-            <div className="text-center mb-6">
-              <h2
-                className={`text-xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent mb-2 tracking-wider`}
-              >
-                ACCESS PROTOCOL
-              </h2>
-              <div
-                className={`h-0.5 w-20 bg-gradient-to-r ${gradient} mx-auto`}
-              ></div>
-            </div>
-
-            {/* System Info */}
-            <div className="space-y-4 text-sm font-mono">
-              <div className="border-l-2 border-cyan-500/50 pl-3">
-                <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
-                  EVENT_NAME
-                </p>
-                <p className="text-white">{eventName}</p>
+              <div className="flex items-center space-x-2">
+                <div className="w-1 h-1 bg-white/60 rounded-full"></div>
+                <p className="text-white/70 text-sm font-medium">{location}</p>
               </div>
 
-              <div className="border-l-2 border-cyan-500/50 pl-3">
-                <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">
-                  TIMESTAMP
-                </p>
-                <p className="text-cyan-400">
+              <div className="flex items-center space-x-2">
+                <div className="w-1 h-1 bg-white/60 rounded-full"></div>
+                <p className="text-white/70 text-sm font-medium">
                   {eventDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
                     year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}{" "}
-                  {eventDate.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
                   })}
                 </p>
               </div>
             </div>
 
-            {/* System Status */}
-            <div className="mt-8 p-4 bg-black/50 border border-cyan-500/30">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-400 uppercase">
-                  SYSTEM STATUS
-                </span>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></div>
-                  <span className="text-xs text-green-400">ACTIVE</span>
-                </div>
-              </div>
-              <div className="text-[10px] font-mono text-cyan-400">
-                OWNER: {ownerAddress || "UNASSIGNED"}
+            {/* Countdown */}
+            <div className="space-y-3">
+              <p className="text-white/60 text-xs font-medium uppercase tracking-wider text-center">
+                Event Starts In
+              </p>
+              <div className="grid grid-cols-4 gap-3">
+                <TimeUnit value={timeLeft.days} label="D" />
+                <TimeUnit value={timeLeft.hours} label="H" />
+                <TimeUnit value={timeLeft.minutes} label="M" />
+                <TimeUnit value={timeLeft.seconds} label="S" />
               </div>
             </div>
 
-            {/* Command Line */}
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="bg-black/70 border border-cyan-500/30 p-2 font-mono text-xs">
-                <span className="text-green-400">$</span>
-                <span className="text-cyan-400 ml-2 animate-pulse">
-                  click_to_flip_card
-                </span>
-                <span className="animate-ping">_</span>
+            {/* Bottom Action */}
+            <div className="text-center">
+              <p className="text-white/40 text-xs font-medium">
+                Tap to view details
+              </p>
+              <div className="flex justify-center mt-2">
+                <div className="w-8 h-0.5 bg-white/20 rounded-full"></div>
               </div>
             </div>
-
-            {/* Corner Accents */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-500/70"></div>
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyan-500/70"></div>
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyan-500/70"></div>
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-500/70"></div>
           </div>
+
+          {/* Corner Elements */}
+          <div className="absolute top-4 left-4 w-3 h-3 border-t border-l border-white/30 rounded-tl"></div>
+          <div className="absolute top-4 right-4 w-3 h-3 border-t border-r border-white/30 rounded-tr"></div>
+          <div className="absolute bottom-4 left-4 w-3 h-3 border-b border-l border-white/30 rounded-bl"></div>
+          <div className="absolute bottom-4 right-4 w-3 h-3 border-b border-r border-white/30 rounded-br"></div>
+        </div>
+
+        {/* Back Side */}
+        <div
+          className="absolute inset-0 rounded-2xl overflow-hidden backdrop-blur-xl border border-white/10"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            background: `
+              linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(15,15,15,0.9) 100%),
+              radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255,255,255,0.05) 0%, transparent 50%)
+            `,
+          }}
+        >
+          {/* Gradient Glow Effect */}
+          <div
+            className={`absolute inset-0 opacity-20 bg-gradient-to-br ${gradient}`}
+            style={{
+              mask: "radial-gradient(circle at center, black 30%, transparent 70%)",
+            }}
+          />
+
+          <div className="relative p-6 h-full flex flex-col justify-between">
+            {/* Header */}
+            <div className="text-center">
+              <h2
+                className={`text-xl font-black bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
+              >
+                Access Token
+              </h2>
+              <div
+                className={`h-0.5 w-12 bg-gradient-to-r ${gradient} mx-auto mt-2`}
+              ></div>
+            </div>
+
+            {/* Token Details */}
+            <div className="space-y-4">
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-3">
+                <p className="text-white/50 text-xs uppercase tracking-wider mb-1">
+                  Owner
+                </p>
+                <p className="text-white font-mono text-xs break-all">
+                  {ownerAddress
+                    ? `${ownerAddress.slice(0, 6)}...${ownerAddress.slice(-4)}`
+                    : "Unassigned"}
+                </p>
+              </div>
+            </div>
+
+            {/* QR Code */}
+            <div className="flex flex-col items-center space-y-3">
+              <QRCode
+                value={`nftix://verify/${ticketId}-${ownerAddress || "null"}`}
+                size={96}
+                fgColor="#00ffff"
+                bgColor="transparent"
+              />{" "}
+              <div className="text-center">
+                <p className="text-white/50 text-xs uppercase tracking-wider mb-1">
+                  Access Code
+                </p>
+                <p className="text-white font-mono text-sm tracking-widest">
+                  {`${ticketId.slice(0, 3)}${ownerAddress?.slice(-3) || "000"}`}
+                </p>
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-green-400 text-xs font-medium uppercase tracking-wider">
+                Verified
+              </span>
+            </div>
+          </div>
+
+          {/* Corner Elements */}
+          <div className="absolute top-4 left-4 w-3 h-3 border-t border-l border-white/30 rounded-tl"></div>
+          <div className="absolute top-4 right-4 w-3 h-3 border-t border-r border-white/30 rounded-tr"></div>
+          <div className="absolute bottom-4 left-4 w-3 h-3 border-b border-l border-white/30 rounded-bl"></div>
+          <div className="absolute bottom-4 right-4 w-3 h-3 border-b border-r border-white/30 rounded-br"></div>
         </div>
       </div>
     </div>
