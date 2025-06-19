@@ -4,6 +4,11 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["Orbitron", "sans-serif"],
+        mono: ["Share Tech Mono", "monospace"],
+        body: ["Rajdhani", "sans-serif"],
+      },
       colors: {
         primary: "var(--color-primary)",
         secondary: "var(--color-secondary)",

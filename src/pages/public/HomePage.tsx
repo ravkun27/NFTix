@@ -4,6 +4,7 @@ import LogoStrip from "../../components/LogoStrip";
 import Navbar from "../../components/Navbar";
 import UpcomingEvents from "../../components/UpcomingEvent";
 import TicketShowcaseSection from "../../components/TicketShowcase";
+import Footer from "../../components/Footer";
 
 const HomePage = () => {
   return (
@@ -32,6 +33,7 @@ const HomePage = () => {
       <LogoStrip />
       <FeaturedEvents />
       <UpcomingEvents />
+      <Footer />
     </div>
   );
 };
