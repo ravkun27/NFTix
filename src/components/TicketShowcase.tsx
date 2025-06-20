@@ -2,7 +2,7 @@ import NFTTicketCard from "./NFTTicketCard";
 
 const TicketShowcaseSection = () => {
   return (
-    <section className="w-full min-h-screen text-white px-8 py-20 flex flex-col md:flex-row items-center justify-between gap-16">
+    <section className="w-full min-h-screen text-white px-8 py-20 flex flex-col md:flex-row items-center justify-center gap-24">
       {/* Left - Description */}
       <div className="max-w-xl">
         <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text mb-6">
