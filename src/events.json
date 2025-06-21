@@ -242,7 +242,7 @@
   },
   [
     {
-      "id": "event001",
+      "id": "event016",
       "name": "CyberCon 2025",
       "description": "The premier event for blockchain and AI innovators.",
       "date": "2025-08-10T18:00:00Z",
@@ -258,7 +258,7 @@
       "tags": ["ai", "blockchain", "conference"]
     },
     {
-      "id": "event002",
+      "id": "event017",
       "name": "Quantum Summit",
       "description": "Explore quantum tech and its impact on crypto.",
       "date": "2025-09-14T15:30:00Z",
@@ -274,7 +274,7 @@
       "tags": ["quantum", "web3", "virtual"]
     },
     {
-      "id": "event003",
+      "id": "event018",
       "name": "Decentral Expo",
       "description": "Dive into the world of Web3, DeFi and NFTs.",
       "date": "2025-10-02T12:00:00Z",
@@ -286,11 +286,11 @@
       "price": 0.06,
       "supply": 450,
       "contractAddress": "0xC03",
-      "status": "resale",
+      "status": "minting",
       "tags": ["defi", "expo", "nft"]
     },
     {
-      "id": "event004",
+      "id": "event019",
       "name": "MetaVerse Live 2025",
       "description": "Immerse yourself in the future of virtual experiences and decentralized entertainment.",
       "date": "2025-08-10T20:00:00Z",
@@ -306,7 +306,7 @@
       "tags": ["vr", "metaverse", "entertainment"]
     },
     {
-      "id": "event005",
+      "id": "event020",
       "name": "Horizon Hackfest",
       "description": "A cutting-edge hackathon blending AI, blockchain, and quantum computing breakthroughs.",
       "date": "2025-09-14T10:00:00Z",
@@ -322,7 +322,7 @@
       "tags": ["hackathon", "ai", "blockchain"]
     },
     {
-      "id": "event006",
+      "id": "event021",
       "name": "Web3 Future Forum",
       "description": "Join global leaders in DeFi, NFTs, and DAOs shaping the next phase of the decentralized internet.",
       "date": "2025-10-02T18:00:00Z",

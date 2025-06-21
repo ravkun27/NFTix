@@ -6,6 +6,9 @@ import Footer from "../../components/Footer";
 import EventGrid from "../../components/EventGrid";
 import rawEvents from "../../events.json";
 import { useMemo } from "react";
+import SectionHeader from "../../components/ui/SectionHeader";
+import FAQSection from "../../components/FAQSection";
+import HowItWorksSection from "../../components/HowItWorksSection";
 interface Event {
   id: string;
   title: string;
@@ -54,63 +57,77 @@ const HomePage = () => {
   const upcomingEvents = events.filter(
     (event: any) => event.status === "upcoming"
   );
-  const ongoingEvents = events.filter(
-    (event: any) => event.status === "ongoing"
-  );
+
   return (
-    <div
-      className="min-h-screen flex flex-col justify-center items-center gap-10"
-      style={{
-        background: "linear-gradient(135deg, #000000 0%, #001122 100%)",
-      }}
-    >
-      <Navbar />
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0 animate-pulse"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,255,255,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,255,255,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: "100px 100px",
-          }}
-        ></div>
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0 animate-pulse"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(0,255,255,0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,255,0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: "100px 100px",
+            }}
+          ></div>
+        </div>
       </div>
-      <HeroSection />
-      <TicketShowcaseSection />
-      <LogoStrip />
 
-      {
-        <EventGrid
-          events={featuredEvents}
-          columns={3}
-          showPrice={true}
-          showSupply={true}
-          showTags={true}
-        />
-      }
+      {/* Content */}
+      <div className="relative z-10">
+        <Navbar />
 
-      {
-        <EventGrid
-          events={upcomingEvents}
-          columns={3}
-          showPrice={true}
-          showSupply={true}
-          showTags={true}
-        />
-      }
-      {
-        <EventGrid
-          events={ongoingEvents}
-          columns={3}
-          showPrice={true}
-          showSupply={true}
-          showTags={true}
-        />
-      }
-      <Footer />
+        <main className="space-y-20">
+          <HeroSection />
+
+          <TicketShowcaseSection />
+
+          <LogoStrip />
+
+          <HowItWorksSection />
+
+          {/* Featured Events */}
+          <section className="py-16 flex justify-center items-center gap-8">
+            <div className="max-w-7xl mx-auto px-8">
+              <SectionHeader
+                title="FEATURED EVENTS"
+                subtitle="Don't miss out on these exclusive NFT ticket drops"
+              />
+              <EventGrid
+                events={featuredEvents}
+                columns={3}
+                showPrice={true}
+                showSupply={true}
+                showTags={true}
+              />
+            </div>
+          </section>
+
+          {/* Upcoming Events */}
+          <section className="py-16 flex justify-center gap-8">
+            <div className="max-w-7xl mx-auto px-8">
+              <SectionHeader
+                title="UPCOMING EVENTS"
+                subtitle="Get ready for these amazing experiences"
+              />
+              <EventGrid
+                events={upcomingEvents}
+                columns={3}
+                showPrice={true}
+                showSupply={true}
+                showTags={true}
+              />
+            </div>
+          </section>
+
+          <FAQSection />
+        </main>
+
+        <Footer />
+      </div>
     </div>
   );
 };
