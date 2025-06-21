@@ -85,6 +85,7 @@ const HomePage = () => {
 
           <TicketShowcaseSection />
 
+          <SectionHeader title="PARTNERS" />
           <LogoStrip />
 
           <HowItWorksSection />
