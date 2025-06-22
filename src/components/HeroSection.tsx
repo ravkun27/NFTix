@@ -5,14 +5,6 @@ const HeroSection = () => {
   const [current, setCurrent] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    setIsVisible(true);
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % cards.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   const cards = [
     {
       eventName: "CYBER NEXUS 2025",
@@ -39,6 +31,13 @@ const HeroSection = () => {
       gradientId: 2,
     },
   ];
+  useEffect(() => {
+    setIsVisible(true);
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % cards.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [cards.length]);
 
   const getCardClass = (index: number) => {
     if (index === current) return "z-30 scale-100 blur-0 opacity-100";
@@ -51,8 +50,6 @@ const HeroSection = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-
-
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-8 py-12">
         <div className="flex flex-col lg:flex-row items-center justify-between min-h-screen">

@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 // Event interface
 interface Event {
   id: string;
@@ -15,7 +13,7 @@ interface Event {
   contractAddress: string;
   gradientId: number;
   tags: string[];
-  status: string;
+  status: "minting" | "sold-out" | "upcoming" | "live";
 }
 
 // Props for the EventGrid component
@@ -54,7 +52,10 @@ const EventCard = ({
     return {
       month: date.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
       day: date.getDate(),
-      time: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+      time: date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
   };
 
@@ -81,12 +82,13 @@ const EventCard = ({
     <div className="group relative">
       {/* Outer glow effect */}
       <div className="absolute -inset-0.3 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-pink-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      
+
       {/* Main Card */}
       <div className="relative bg-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden hover:border-cyan-400/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10 w-[18rem] h-[20rem] flex flex-col">
-        
         {/* Header with image/gradient background */}
-        <div className={`relative h-28 bg-gradient-to-br ${gradient} overflow-hidden flex-shrink-0`}>
+        <div
+          className={`relative h-28 bg-gradient-to-br ${gradient} overflow-hidden flex-shrink-0`}
+        >
           {event.image && (
             <img
               src={event.image}
@@ -97,27 +99,35 @@ const EventCard = ({
               }}
             />
           )}
-          
+
           {/* Overlay grid pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
-          
+
           {/* Status Badge */}
-          <div className={`absolute top-2 left-2 px-2 py-1 rounded-md text-xs font-mono uppercase border shadow-lg ${getStatusColor(event.status)}`}>
+          <div
+            className={`absolute top-2 left-2 px-2 py-1 rounded-md text-xs font-mono uppercase border shadow-lg ${getStatusColor(
+              event.status
+            )}`}
+          >
             {event.status}
           </div>
-          
+
           {/* Supply Badge */}
           {showSupply && (
             <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-sm rounded-md text-xs font-mono text-green-300 border border-green-400/30">
               {event.supply > 0 ? `${event.supply} LEFT` : "SOLD OUT"}
             </div>
           )}
-          
+
           {/* Date Display */}
           <div className="absolute bottom-2 left-2 flex items-center space-x-2">
             <div className="bg-black/80 backdrop-blur-sm rounded-lg px-2 py-1 border border-cyan-400/30">
-              <div className="text-xs text-cyan-300 font-mono">{dateInfo.month}</div>
-              <div className="text-lg font-bold text-white leading-none">{dateInfo.day}</div>
+              <div className="text-xs text-cyan-300 font-mono">
+                {dateInfo.month}
+              </div>
+              <div className="text-lg font-bold text-white leading-none">
+                {dateInfo.day}
+              </div>
             </div>
             <div className="text-xs text-gray-300 font-mono bg-black/60 px-2 py-1 rounded">
               {dateInfo.time}
@@ -154,7 +164,9 @@ const EventCard = ({
             </div>
             <div className="flex items-center text-gray-300">
               <span className="text-xs mr-2">👤</span>
-              <span className="text-cyan-400 truncate font-mono">{event.organizer}</span>
+              <span className="text-cyan-400 truncate font-mono">
+                {event.organizer}
+              </span>
             </div>
           </div>
 
@@ -165,11 +177,15 @@ const EventCard = ({
           <div className="flex items-center justify-between mb-2 flex-shrink-0">
             {showPrice && (
               <div className="flex items-baseline space-x-1">
-                <span className="text-xl font-bold text-green-400">{event.price}</span>
-                <span className="text-sm text-green-300 font-mono">{event.currency}</span>
+                <span className="text-xl font-bold text-green-400">
+                  {event.price}
+                </span>
+                <span className="text-sm text-green-300 font-mono">
+                  {event.currency}
+                </span>
               </div>
             )}
-            
+
             <button
               onClick={(e) => {
                 e.stopPropagation();
