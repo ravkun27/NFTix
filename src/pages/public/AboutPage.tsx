@@ -24,11 +24,20 @@ const AboutPage = () => {
           }}
         ></div>
       </div>
+
+      <div className="absolute top-4 left-4 cursor-pointer">
+        <p
+          className="text-gray-400 p-2 border border-gray-400 rounded-md"
+          onClick={() => window.history.back()}
+        >
+          Go Back
+        </p>
+      </div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h1 className="text-4xl font-extrabold text-primary mb-6">
           About NFTiX
         </h1>
-        <p className="text-lg text-muted">
+        <p className="text-lg text-gray-400">
           Over <span className="font-bold text-accent">30%</span> of event
           tickets are scalped on the secondary market, leading to inflated
           prices and fraud. <br />

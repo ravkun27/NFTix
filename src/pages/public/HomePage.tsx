@@ -48,7 +48,7 @@ const normalizeEvents = (rawEvents: any[]): Event[] => {
         : "upcoming",
   }));
 };
-const HomePage = () => {
+const HomePage = (setMintedTickets: any) => {
   const events = useMemo(() => normalizeEvents(rawEvents), []);
 
   const featuredEvents = events
@@ -103,6 +103,7 @@ const HomePage = () => {
                 showPrice={true}
                 showSupply={true}
                 showTags={true}
+                setMintedTickets={setMintedTickets}
               />
             </div>
           </section>
@@ -120,6 +121,7 @@ const HomePage = () => {
                 showPrice={true}
                 showSupply={true}
                 showTags={true}
+                setMintedTickets={setMintedTickets}
               />
             </div>
           </section>

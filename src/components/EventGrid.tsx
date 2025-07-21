@@ -1,3 +1,9 @@
+// src/components/EventGrid.tsx
+import React, { useState } from "react";
+import { useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
+import { useTicketStore } from "../store/ticketStore";
+
 // Event interface
 interface Event {
   id: string;
@@ -13,20 +19,20 @@ interface Event {
   contractAddress: string;
   gradientId: number;
   tags: string[];
-  status: "minting" | "sold-out" | "upcoming" | "live";
+  status: string;
 }
 
 // Props for the EventGrid component
 interface EventGridProps {
-  id?: string;
   events: Event[];
   columns?: 1 | 2 | 3 | 4;
   showPrice?: boolean;
   showSupply?: boolean;
   showTags?: boolean;
+  mintedTicketIds: Set<string>;
 }
 
-// Futuristic gradient presets
+// Gradient presets
 const gradients = [
   "from-cyan-500/30 via-blue-600/20 to-purple-700/30",
   "from-pink-500/30 via-purple-600/20 to-blue-700/30",
@@ -40,13 +46,21 @@ const EventCard = ({
   showPrice = true,
   showSupply = true,
   showTags = true,
+  isMinted,
 }: {
   event: Event;
-  onMintTicket: (event: Event) => void;
   showPrice?: boolean;
   showSupply?: boolean;
   showTags?: boolean;
+  isMinted?: boolean;
 }) => {
+  const [isConnected, setIsConnected] = useState(false);
+  const [isMinting, setIsMinting] = useState(false);
+  const [mintSuccess, setMintSuccess] = useState(false);
+
+  const { connect } = useConnect();
+  const { mintTicket } = useTicketStore();
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return {
@@ -74,18 +88,56 @@ const EventCard = ({
     }
   };
 
+  const handleMintClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!isConnected) {
+      try {
+        await connect({ connector: injected() });
+        setIsConnected(true);
+      } catch (error) {
+        console.error("Connection error:", error);
+      }
+    } else if (event.status === "minting" && !isMinting && !mintSuccess) {
+      setIsMinting(true);
+      try {
+        // Simulate minting delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        mintTicket(event.id);
+        setMintSuccess(true);
+      } catch (error) {
+        console.error("Minting error:", error);
+      } finally {
+        setIsMinting(false);
+      }
+    }
+  };
+
   const gradient = gradients[event.gradientId % gradients.length];
   const isMintable = event.status === "minting";
   const dateInfo = formatDate(event.date);
 
-  return (
-    <div className="group relative">
-      {/* Outer glow effect */}
-      <div className="absolute -inset-0.3 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-pink-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+  const getButtonContent = () => {
+    if (mintSuccess || isMinted) return "MINTED ✅";
+    if (isMinting) return "MINTING...";
+    if (!isConnected) return "CONNECT";
+    if (isMintable) return "MINT ⚡";
+    return "SOON";
+  };
 
-      {/* Main Card */}
-      <div className="relative bg-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden hover:border-cyan-400/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10 w-[18rem] h-[20rem] flex flex-col">
-        {/* Header with image/gradient background */}
+  const getButtonStyle = () => {
+    if (mintSuccess) return "bg-green-500 text-white cursor-default";
+    if (isMinting) return "bg-yellow-500 text-black cursor-wait";
+    if (!isConnected) return "bg-blue-500 hover:bg-blue-600 text-white";
+    if (isMintable) return "bg-green-500 hover:bg-green-600 text-black";
+    return "bg-gray-700 text-gray-300 hover:bg-gray-600";
+  };
+
+  return (
+    <div className="group relative w-[18rem]">
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-pink-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+      <div className="relative bg-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden hover:border-cyan-400/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10 h-[20rem] flex flex-col">
         <div
           className={`relative h-28 bg-gradient-to-br ${gradient} overflow-hidden flex-shrink-0`}
         >
@@ -99,11 +151,8 @@ const EventCard = ({
               }}
             />
           )}
-
-          {/* Overlay grid pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
-          {/* Status Badge */}
           <div
             className={`absolute top-2 left-2 px-2 py-1 rounded-md text-xs font-mono uppercase border shadow-lg ${getStatusColor(
               event.status
@@ -112,14 +161,12 @@ const EventCard = ({
             {event.status}
           </div>
 
-          {/* Supply Badge */}
           {showSupply && (
             <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 backdrop-blur-sm rounded-md text-xs font-mono text-green-300 border border-green-400/30">
               {event.supply > 0 ? `${event.supply} LEFT` : "SOLD OUT"}
             </div>
           )}
 
-          {/* Date Display */}
           <div className="absolute bottom-2 left-2 flex items-center space-x-2">
             <div className="bg-black/80 backdrop-blur-sm rounded-lg px-2 py-1 border border-cyan-400/30">
               <div className="text-xs text-cyan-300 font-mono">
@@ -135,11 +182,9 @@ const EventCard = ({
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-4 flex flex-col flex-1 min-h-0">
-          {/* Tags */}
+        <div className="p-4 flex flex-col flex-1">
           {showTags && event.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mb-2 flex-shrink-0">
+            <div className="flex flex-wrap gap-1 mb-2">
               {event.tags.slice(0, 2).map((tag, index) => (
                 <span
                   key={index}
@@ -151,13 +196,11 @@ const EventCard = ({
             </div>
           )}
 
-          {/* Title */}
-          <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors duration-200 line-clamp-1 mb-2 flex-shrink-0">
+          <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors duration-200 line-clamp-1 mb-2">
             {event.title}
           </h3>
 
-          {/* Location & Organizer */}
-          <div className="space-y-1 text-sm mb-3 flex-shrink-0">
+          <div className="space-y-1 text-sm mb-3">
             <div className="flex items-center text-gray-300">
               <span className="text-xs mr-2">📍</span>
               <span className="truncate">{event.location}</span>
@@ -170,11 +213,9 @@ const EventCard = ({
             </div>
           </div>
 
-          {/* Spacer to push content to bottom */}
           <div className="flex-1"></div>
 
-          {/* Price & Action */}
-          <div className="flex items-center justify-between mb-2 flex-shrink-0">
+          <div className="flex items-center justify-between">
             {showPrice && (
               <div className="flex items-baseline space-x-1">
                 <span className="text-xl font-bold text-green-400">
@@ -187,23 +228,12 @@ const EventCard = ({
             )}
 
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className={`px-3 py-2 text-xs font-bold rounded-lg transition-all duration-200 flex items-center space-x-1 ${
-                isMintable
-                  ? "bg-gradient-to-r from-green-500 to-cyan-500 text-black hover:from-green-400 hover:to-cyan-400 shadow-lg hover:shadow-green-400/25"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-              }`}
+              onClick={handleMintClick}
+              disabled={mintSuccess || isMinting}
+              className={`px-4 py-2 rounded-lg transition-all duration-200 ${getButtonStyle()}`}
             >
-              <span>{isMintable ? "MINT" : "SOON"}</span>
-              {isMintable && <span className="text-xs">⚡</span>}
+              {getButtonContent()}
             </button>
-          </div>
-
-          {/* Contract Address */}
-          <div className="text-xs text-gray-500 font-mono bg-gray-800/50 px-2 py-1 rounded border border-gray-700/50 truncate flex-shrink-0">
-            Contract: {event.contractAddress}
           </div>
         </div>
       </div>
@@ -217,6 +247,7 @@ const EventGrid = ({
   showPrice = true,
   showSupply = true,
   showTags = true,
+  mintedTicketIds,
 }: EventGridProps) => {
   const getGridColumns = () => {
     switch (columns) {
@@ -233,11 +264,7 @@ const EventGrid = ({
     }
   };
 
-  const handleMintTicket = () => {
-    alert("Minting tickets not available yet.");
-  };
-
-  if (!Array.isArray(events) || events.length === 0) {
+  if (!events || events.length === 0) {
     return (
       <div className="text-center py-20">
         <div className="text-6xl mb-4 opacity-50">🎫</div>
@@ -250,15 +277,15 @@ const EventGrid = ({
   }
 
   return (
-    <div className={`grid ${getGridColumns()} gap-6`}>
-      {events?.map((event) => (
+    <div className={`grid ${getGridColumns()} gap-6 justify-items-center`}>
+      {events.map((event) => (
         <EventCard
           key={event.id}
           event={event}
-          onMintTicket={handleMintTicket}
           showPrice={showPrice}
           showSupply={showSupply}
           showTags={showTags}
+          isMinted={mintedTicketIds?.has(event.id)}
         />
       ))}
     </div>

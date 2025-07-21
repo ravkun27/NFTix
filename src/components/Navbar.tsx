@@ -23,7 +23,6 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Explore", path: "/" },
-    { name: "Create Event", path: "/create" },
     { name: "My Tickets", path: "/tickets" },
     { name: "About", path: "/about" },
   ];
