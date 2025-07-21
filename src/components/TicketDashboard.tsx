@@ -30,6 +30,7 @@ const TicketsPage = () => {
           showSupply={false}
           showTags={true}
           mintedTicketIds={mintedTicketIds}
+          setMintedTickets={() => {}}
         />
       ) : (
         <p className="text-center text-gray-300 mt-10">

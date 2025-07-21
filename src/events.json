@@ -125,7 +125,7 @@
     "contractAddress": "0xA8",
     "gradientId": 2,
     "tags": ["music", "street", "bass"],
-    "status": "upcoming"
+    "status": "minting"
   },
   {
     "id": "event009",
@@ -157,7 +157,7 @@
     "contractAddress": "0xAA",
     "gradientId": 4,
     "tags": ["techno", "bass", "underground"],
-    "status": "upcoming"
+    "status": "minting"
   },
   {
     "id": "event011",

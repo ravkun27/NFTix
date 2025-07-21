@@ -30,6 +30,7 @@ interface EventGridProps {
   showSupply?: boolean;
   showTags?: boolean;
   mintedTicketIds: Set<string>;
+  setMintedTickets: any;
 }
 
 // Gradient presets

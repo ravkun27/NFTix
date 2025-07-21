@@ -48,7 +48,7 @@ const normalizeEvents = (rawEvents: any[]): Event[] => {
         : "upcoming",
   }));
 };
-const HomePage = (setMintedTickets: any) => {
+const HomePage = () => {
   const events = useMemo(() => normalizeEvents(rawEvents), []);
 
   const featuredEvents = events
@@ -103,7 +103,30 @@ const HomePage = (setMintedTickets: any) => {
                 showPrice={true}
                 showSupply={true}
                 showTags={true}
-                setMintedTickets={setMintedTickets}
+                setMintedTickets={() => {}}
+                mintedTicketIds={new Set()}
+              />
+            </div>
+          </section>
+
+          {/* Live Events */}
+          <section className="py-16 flex justify-center items-center gap-8">
+            <div className="max-w-7xl mx-auto px-8">
+              <SectionHeader
+                title="LIVE EVENTS"
+                subtitle="Get ready for these live experiences"
+              />
+              <EventGrid
+                events={events.filter(
+                  (event) =>
+                    event.status === "live" || event.status === "minting"
+                )}
+                columns={3}
+                showPrice={true}
+                showSupply={true}
+                showTags={true}
+                setMintedTickets={() => {}}
+                mintedTicketIds={new Set()}
               />
             </div>
           </section>
@@ -121,7 +144,8 @@ const HomePage = (setMintedTickets: any) => {
                 showPrice={true}
                 showSupply={true}
                 showTags={true}
-                setMintedTickets={setMintedTickets}
+                setMintedTickets={() => {}}
+                mintedTicketIds={new Set()}
               />
             </div>
           </section>
